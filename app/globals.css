@@ -23,7 +23,7 @@
 }
 
 .fade-in-up {
-  animation: fadeInUp 1s ease-out;
+  animation: fadeInUp 0.5s ease-out;
 }
 
 /* 모달 배경을 흐리게 처리하기 위한 스타일링 */
