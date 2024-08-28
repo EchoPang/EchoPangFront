@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { ethers } from "ethers";
 export default function Home() {
+  const LOCALIP = "http://localhost:3000";
   const [account, setAccount] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // 첫 번째 모달 상태
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false); // 분야 선택 모달 상태
@@ -59,38 +60,34 @@ export default function Home() {
   };
 
   // 등록 여부 확인 쿼리
+  // 등록 여부 확인 쿼리
   const { refetch: checkRegistration } = useQuery({
     queryKey: ["checkRegistration", account],
     queryFn: async () => {
-      const res = await fetch("/auth/login", {
+      const res = await fetch(`${LOCALIP}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ walletAddress: account }),
       });
-
-      if (!res.ok) {
-        throw new Error("Not registered");
-      }
-
       const data = await res.json();
+      if (!res.ok) {
+        // 401 에러일 경우 에러를 발생시켜 onError로 처리하도록 합니다.
+        if (res.status === 401) {
+          setIsModalOpen(true);
+        } else {
+        }
+      } else {
+        localStorage.setItem("accessToken", data.accessToken);
+        router.push("/dashboard");
+      }
       return data;
-    },
-    enabled: false, // 초기에는 실행되지 않도록 설정
-    onSuccess: (data) => {
-      // 이미 등록된 지갑이면 대시보드로 이동
-      localStorage.setItem("accessToken", data.accessToken);
-      router.push("/dashboard");
-    },
-    onError: () => {
-      // 등록되지 않은 지갑이면 가입 모달을 표시
-      setIsModalOpen(true);
     },
   });
 
   // 등록 요청 뮤테이션
   const registerMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch("/auth/register", {
+      const res = await fetch(`${LOCALIP}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -105,7 +102,6 @@ export default function Home() {
           },
         }),
       });
-
       if (!res.ok) {
         throw new Error("Failed to register");
       }
@@ -175,8 +171,11 @@ export default function Home() {
         />
         {/* 로그인 버튼 */}
         {account ? (
-          <p className="text-2xl text-white font-pretendard fade-in-up">
-            Connected account: {account}
+          <p className="text-2xl text-black font-pretendard fade-in-up">
+            지갑 연결 성공...! 그러나...?
+            <p className="text-sm text-black font-pretendard fade-in-up">
+              {account}
+            </p>
           </p>
         ) : (
           <button
