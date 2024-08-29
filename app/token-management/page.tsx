@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import Layout from "../components/Layout";
+import RewardTable from "../components/RewardTable";
+import DetailModal from "../components/DetailModal";
 
 const WasteManagementPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -83,82 +85,12 @@ const WasteManagementPage = () => {
   return (
     <Layout>
       <h1 className="text-2xl font-bold font-pretendard mb-6">토큰 관리</h1>
-      <div className="bg-white rounded-lg p-4 h-auto fade-in-up">
-        <div className="font-pretendard font-bold text-lg mb-4">
-          최근 토큰 보상 내역
-        </div>
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Tx ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                폐기물 유형
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                보상 사유
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                지급 일자
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                지급 상태
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                보상액
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                상세 내역
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {rewardData.map((reward, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {reward.txId}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {reward.wasteType}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {reward.reason}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {reward.date}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {reward.status}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {reward.rewardAmount}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-500 underline cursor-pointer">
-                  <button onClick={() => handleDetailClick(reward.detail)}>
-                    상세 내역
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
 
-      {/* 모달 */}
+      <RewardTable handleDetailClick={handleDetailClick} />
+
+      {/* 상세 모달 */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg p-6 w-1/3">
-            <h2 className="text-xl font-bold mb-4">상세 내역</h2>
-            <p className="text-sm">{selectedDetail}</p>
-            <button
-              className="mt-4 px-4 py-2 bg-eco-main text-white rounded"
-              onClick={closeModal}
-            >
-              닫기
-            </button>
-          </div>
-        </div>
+        <DetailModal selectedDetail={selectedDetail} closeModal={closeModal} />
       )}
     </Layout>
   );
