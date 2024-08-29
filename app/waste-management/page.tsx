@@ -73,7 +73,7 @@ const WasteManagementPage = () => {
   return (
     <Layout>
       <h1 className="text-2xl font-bold font-pretendard mb-6">폐기물 관리</h1>
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-3 gap-4 mb-6 fade-in-up">
         {/* 큰 카드 */}
         <div className="flex flex-col col-span-2 bg-white items-start rounded-lg p-4 h-80">
           <div className="flex flex-row justify-between w-full items-center">

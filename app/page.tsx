@@ -60,7 +60,6 @@ export default function Home() {
   };
 
   // 등록 여부 확인 쿼리
-  // 등록 여부 확인 쿼리
   const { refetch: checkRegistration } = useQuery({
     queryKey: ["checkRegistration", account],
     queryFn: async () => {
@@ -82,6 +81,7 @@ export default function Home() {
       }
       return data;
     },
+    enabled: false,
   });
 
   // 등록 요청 뮤테이션
@@ -171,15 +171,12 @@ export default function Home() {
         />
         {/* 로그인 버튼 */}
         {account ? (
-          <p className="text-2xl text-black font-pretendard fade-in-up">
-            지갑 연결 성공...! 그러나...?
-            <p className="text-sm text-black font-pretendard fade-in-up">
-              {account}
-            </p>
-          </p>
+          <p className="text-2xl text-black font-pretendard fade-in-up"></p>
         ) : (
           <button
-            onClick={handleLogin}
+            onClick={() => {
+              handleLogin();
+            }}
             className="font-pretendard bg-eco-main w-48 h-14 rounded-lg mt-12 shadow-lg text-white text-xl fade-in-up"
           >
             로그인

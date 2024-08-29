@@ -159,7 +159,7 @@ const DashboardPage = () => {
       <h1 className="text-2xl font-bold font-pretendard mb-6">대시보드</h1>
 
       {/* 카드 레이아웃 */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-3 gap-4 mb-6 fade-in-up">
         {/* 작은 카드 3개 */}
         <div className="bg-white flex items-center justify-start rounded-lg p-4 h-32">
           <img src="/images/trophy.png" alt="trophy" className="w-20 h-20" />
@@ -207,7 +207,7 @@ const DashboardPage = () => {
       </div>
 
       {/* 중간 줄의 큰 카드와 작은 카드 */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-3 gap-4 mb-6 fade-in-up">
         {/* 큰 카드 */}
         <div className="flex flex-col col-span-2 bg-white items-start rounded-lg p-4 h-80">
           <div className="flex flex-row justify-between w-full items-center">
@@ -270,7 +270,7 @@ const DashboardPage = () => {
       </div>
 
       {/* 마지막 줄의 큰 카드 - 최근 토큰 보상 내역 */}
-      <div className="bg-white rounded-lg p-4 h-auto">
+      <div className="bg-white rounded-lg p-4 h-auto fade-in-up">
         <div className="font-pretendard font-bold text-lg mb-4">
           최근 토큰 보상 내역
         </div>

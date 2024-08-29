@@ -83,7 +83,7 @@ const WasteManagementPage = () => {
   return (
     <Layout>
       <h1 className="text-2xl font-bold font-pretendard mb-6">토큰 관리</h1>
-      <div className="bg-white rounded-lg p-4 h-auto">
+      <div className="bg-white rounded-lg p-4 h-auto fade-in-up">
         <div className="font-pretendard font-bold text-lg mb-4">
           최근 토큰 보상 내역
         </div>
