@@ -77,8 +77,8 @@ const LineChart: React.FC<LineChartProps> = ({
     ? [...wasteRecords]
         .filter(
           (record) =>
-            (selectedData === "t/day" && record.wasteType === "영농 폐기물") ||
-            (selectedData === "L/day" && record.wasteType === "오수량")
+            (selectedData === "t/day" && record.wasteType !== "우수 및 오수") ||
+            (selectedData === "L/day" && record.wasteType === "우수 및 오수")
         )
         .sort(
           (a, b) =>

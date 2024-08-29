@@ -1,24 +1,26 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 
 interface WasteGoalData {
   wasteType: string;
-  achievementRate?: number; // 서버에서 가져오는 데이터의 구조에 따라 optional로 설정
+  achievementRate?: number; // Optional based on server data structure
 }
 
-// 데이터를 가져오는 함수 (API 호출)
+// Function to fetch goals data (API call)
 const fetchGoalsData = async (): Promise<WasteGoalData[]> => {
   const response = await fetch("http://localhost:3000/goals", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      userId: "1", // 헤더에 userId 포함
+      userId: "1", // Include userId in the headers
     },
   });
 
   if (!response.ok) {
-    throw new Error("데이터를 가져오는 데 실패했습니다.");
+    throw new Error("Failed to fetch data.");
   }
 
   const data = await response.json();
@@ -26,6 +28,8 @@ const fetchGoalsData = async (): Promise<WasteGoalData[]> => {
 };
 
 const WasteGoal: React.FC = () => {
+  const router = useRouter();
+  const pathname = usePathname();
   const {
     data: goalsData,
     isLoading,
@@ -35,11 +39,7 @@ const WasteGoal: React.FC = () => {
     queryFn: fetchGoalsData,
   });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error)
-    return <div>데이터를 가져오는 중 오류가 발생했습니다: {error.message}</div>;
-
-  // 기준 데이터 배열을 정의하고 초기 값을 0%로 설정합니다.
+  // Define the base data array with initial percentages set to 0%
   const baseWasteData = [
     { type: "영농 폐기물", percentage: 0 },
     { type: "폐비닐", percentage: 0 },
@@ -48,16 +48,32 @@ const WasteGoal: React.FC = () => {
     { type: "우수 및 오수", percentage: 0 },
   ];
 
-  // 서버 데이터와 기준 데이터를 매핑하여 목표 달성도를 설정합니다.
+  // Map server data to the base data and set achievement rates
   const wasteData = baseWasteData.map((base) => {
     const matchedGoal = goalsData?.find((goal) => goal.wasteType === base.type);
+    const percentage = matchedGoal ? matchedGoal.achievementRate || 0 : 0;
     return {
       type: base.type,
-      percentage: matchedGoal
-        ? Math.round(matchedGoal.achievementRate || 0)
-        : 0, // 서버 데이터가 없으면 0으로 표시
+      percentage: Math.round(percentage), // Display actual percentage, even if it exceeds 100%
+      barWidth: Math.min(Math.round(percentage), 100), // Limit bar width to 100%
     };
   });
+
+  // Show alert and navigate if no goals data and not on waste-management page
+  useEffect(() => {
+    if (
+      goalsData &&
+      goalsData.length === 0 &&
+      pathname !== "/waste-management"
+    ) {
+      alert("목표 값이 없어요! 설정 페이지로 이동할게요.");
+      router.push("/waste-management");
+    }
+  }, [goalsData, pathname, router]);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error)
+    return <div>데이터를 가져오는 중 오류가 발생했습니다: {error.message}</div>;
 
   return (
     <div className="bg-white rounded-lg p-4 h-80">
@@ -73,7 +89,7 @@ const WasteGoal: React.FC = () => {
           <div className="w-full bg-gray-200 rounded-full h-2.5">
             <div
               className="bg-eco-main h-2.5 rounded-full"
-              style={{ width: `${waste.percentage}%` }}
+              style={{ width: `${waste.barWidth}%` }} // Use barWidth to limit the width
             ></div>
           </div>
         </div>

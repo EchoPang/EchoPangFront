@@ -1,78 +1,107 @@
+// pages/WasteManagementPage.tsx
+
 "use client";
 import { useState } from "react";
 import Layout from "../components/Layout";
 import RewardTable from "../components/RewardTable";
 import DetailModal from "../components/DetailModal";
+import ProductList from "../components/ProductList"; // Import ProductList
+import { Product } from "../components/ProductCard"; // Import Product interface
 
 const WasteManagementPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDetail, setSelectedDetail] = useState(null);
 
-  const rewardData = [
+  // Initialize a list of products (this can be fetched from an API)
+  const [products, setProducts] = useState<Product[]>([
     {
-      txId: "0x1234abcd",
-      wasteType: "폐비닐",
-      reason: "폐기물 분리배출",
-      date: "2024-08-21",
-      status: "지급 완료",
-      rewardAmount: "100 TOKEN",
-      detail: "지급 완료 상세 내역",
+      id: 1,
+      name: "유기농 비료",
+      description: "자연에서 유래된 성분으로 만든 고품질 유기농 비료입니다.",
+      price: 15,
+      imageUrl: "https://picsum.photos/200/300?random=1",
     },
     {
-      txId: "0x5678efgh",
-      wasteType: "영농 폐기물",
-      reason: "폐기물 재활용",
-      date: "2024-08-19",
-      status: "지급 대기",
-      rewardAmount: "150 TOKEN",
-      detail: "지급 대기 상세 내역",
+      id: 2,
+      name: "씨앗 세트",
+      description: "다양한 작물을 재배할 수 있는 씨앗 세트입니다.",
+      price: 8,
+      imageUrl: "https://picsum.photos/200/300?random=2",
     },
     {
-      txId: "0x91011ijk",
-      wasteType: "기타 폐기물",
-      reason: "올바른 폐기물 처리",
-      date: "2024-08-18",
-      status: "지급 완료",
-      rewardAmount: "200 TOKEN",
-      detail: "지급 완료 상세 내역",
+      id: 3,
+      name: "컴포스트 빈",
+      description:
+        "음식물 쓰레기와 정원 폐기물을 퇴비로 만들 수 있는 용기입니다.",
+      price: 25,
+      imageUrl: "https://picsum.photos/200/300?random=3",
     },
     {
-      txId: "0x1213lmno",
-      wasteType: "합성수지 (PE류 제외)",
-      reason: "폐기물 분리배출",
-      date: "2024-08-17",
-      status: "지급 대기",
-      rewardAmount: "250 TOKEN",
-      detail: "지급 대기 상세 내역",
+      id: 4,
+      name: "자연 방충제",
+      description: "화학 성분 없이 해충을 퇴치할 수 있는 방충제입니다.",
+      price: 12,
+      imageUrl: "https://picsum.photos/200/300?random=4",
     },
     {
-      txId: "0x1415pqrs",
-      wasteType: "우수 및 오수",
-      reason: "폐수 처리",
-      date: "2024-08-15",
-      status: "지급 완료",
-      rewardAmount: "300 TOKEN",
-      detail: "지급 완료 상세 내역",
+      id: 5,
+      name: "물 절약 호스",
+      description: "효율적인 물 사용을 돕는 물 절약 호스입니다.",
+      price: 20,
+      imageUrl: "https://picsum.photos/200/300?random=5",
     },
     {
-      txId: "0x1617tuvw",
-      wasteType: "폐비닐",
-      reason: "폐기물 분리배출",
-      date: "2024-08-14",
-      status: "지급 완료",
-      rewardAmount: "100 TOKEN",
-      detail: "지급 완료 상세 내역",
+      id: 6,
+      name: "정원 가위",
+      description: "가지치기와 수확에 적합한 고품질 정원 가위입니다.",
+      price: 18,
+      imageUrl: "https://picsum.photos/200/300?random=6",
     },
     {
-      txId: "0x1819xyz",
-      wasteType: "영농 폐기물",
-      reason: "폐기물 재활용",
-      date: "2024-08-13",
-      status: "지급 대기",
-      rewardAmount: "150 TOKEN",
-      detail: "지급 대기 상세 내역",
+      id: 7,
+      name: "다목적 퇴비",
+      description: "모든 종류의 식물에 사용할 수 있는 다목적 퇴비입니다.",
+      price: 22,
+      imageUrl: "https://picsum.photos/200/300?random=7",
     },
-  ];
+    {
+      id: 8,
+      name: "미생물 토양 활성제",
+      description: "토양 속 미생물을 활성화시켜 식물 성장을 촉진합니다.",
+      price: 30,
+      imageUrl: "https://picsum.photos/200/300?random=8",
+    },
+    {
+      id: 9,
+      name: "온실 키트",
+      description: "작은 공간에서도 식물을 키울 수 있는 미니 온실 키트입니다.",
+      price: 40,
+      imageUrl: "https://picsum.photos/200/300?random=9",
+    },
+    {
+      id: 10,
+      name: "스프링클러 시스템",
+      description:
+        "정원 전역에 고르게 물을 뿌릴 수 있는 스프링클러 시스템입니다.",
+      price: 50,
+      imageUrl: "https://picsum.photos/200/300?random=10",
+    },
+    {
+      id: 11,
+      name: "자동 급수 장치",
+      description:
+        "부재 중에도 정원에 물을 공급할 수 있는 자동 급수 장치입니다.",
+      price: 35,
+      imageUrl: "https://picsum.photos/200/300?random=11",
+    },
+  ]);
+
+  // Function to handle the purchase action
+  const handlePurchase = (product: Product) => {
+    alert(`You have purchased: ${product.name} for ${product.price} tokens.`);
+    // Here, you can implement further logic like deducting the tokens, updating state, etc.
+  };
+
   const handleDetailClick = (detail) => {
     setSelectedDetail(detail);
     setIsModalOpen(true);
@@ -82,11 +111,22 @@ const WasteManagementPage = () => {
     setIsModalOpen(false);
     setSelectedDetail(null);
   };
+
   return (
     <Layout>
       <h1 className="text-2xl font-bold font-pretendard mb-6">토큰 관리</h1>
 
-      <RewardTable handleDetailClick={handleDetailClick} />
+      <div className="fade-in-up">
+        <RewardTable handleDetailClick={handleDetailClick} />
+      </div>
+
+      {/* Product list component */}
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold mb-4 font-pretendard ">
+          구매 가능한 상품
+        </h2>
+        <ProductList products={products} handlePurchase={handlePurchase} />
+      </div>
 
       {/* 상세 모달 */}
       {isModalOpen && (

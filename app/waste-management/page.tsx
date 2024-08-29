@@ -35,13 +35,21 @@ const WasteManagementPage = () => {
       </div>
 
       {/* 폐기물 기록 테이블 */}
-      <WasteRecordTable handleDetailClick={handleDetailClick} />
+      <div className="fade-in-up">
+        <WasteRecordTable handleDetailClick={handleDetailClick} />
+      </div>
 
       {/* 폐기물 수거 신청 카드 */}
-      <WasteCollectionCard />
+
+      <div className="fade-in-up">
+        <WasteCollectionCard />
+      </div>
 
       {/* 목표 설정 카드 섹션 */}
-      <GoalSettingCard onGoalSet={handleGoalSet} />
+
+      <div className="fade-in-up">
+        <GoalSettingCard onGoalSet={handleGoalSet} />
+      </div>
     </Layout>
   );
 };
