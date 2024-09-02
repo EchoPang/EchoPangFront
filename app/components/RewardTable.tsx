@@ -32,6 +32,7 @@ const fetchRewardsData = async (): Promise<Reward[]> => {
   }
 
   const data = await response.json();
+  console.log(data);
 
   // Convert fetched data to Reward format
   const rewards = data.rewards.map((reward: any) => ({

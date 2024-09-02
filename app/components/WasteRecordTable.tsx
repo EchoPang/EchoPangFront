@@ -31,6 +31,7 @@ const fetchWasteRecords = async (): Promise<WasteRecord[]> => {
   }
 
   const data = await response.json();
+  console.log(data);
   return data; // Data is already in the WasteRecord format, no conversion needed
 };
 
